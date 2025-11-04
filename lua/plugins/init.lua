@@ -4,6 +4,11 @@ return {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = "unokai",
+      defaults = {
+        lazyvim = {
+          dashboard = true,
+        },
+      },
     },
   },
 
@@ -86,26 +91,25 @@ return {
     "wakatime/vim-wakatime",
   },
 
-  -- Live edit code (HTML, CSS, Js)
-  {
-    "turbio/bracey.vim",
-    cmd = { "Bracey", "BracyStop", "BraceyReload", "BraceyEval" },
-    build = "npm install --prefix server",
-  },
-
-  -- Minimap
+  -- Minimap (wfxr/minimap.vim)
   {
     "wfxr/minimap.vim",
     build = "cargo install --locked code-minimap",
-    -- cmd = {"Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight"},
     init = function()
       vim.cmd("let g:minimap_width = 10")
-      vim.cmd("let g:minimap_auto_start = 1")
-      vim.cmd("let g:minimap_auto_start_win_enter = 1")
+      vim.cmd("let g:minimap_auto_start = 0") -- Prevent auto-start
+      vim.cmd("let g:minimap_auto_start_win_enter = 0") -- Prevent auto-start on win enter
     end,
     config = function()
-      -- Any Lua-based configuration for minimap.vim can go here if needed
+      -- Autocmd to open minimap only for regular files, not on dashboard
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        callback = function()
+          -- Check if it's a normal file buffer and not the dashboard
+          if vim.bo.buftype == "" and vim.fn.bufname("%") ~= "" and vim.fn.bufname("%") ~= "dashboard" then
+            vim.cmd("MinimapOpen")
+          end
+        end,
+      })
     end,
   },
 }
-
