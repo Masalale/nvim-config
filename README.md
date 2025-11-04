@@ -1,6 +1,6 @@
-# My Neovim Configuration (Powered by LazyVim)
+# My Neovim Configuration (An Opinionated LazyVim Setup)
 
-This repository contains my personal Neovim configuration, built on top of the excellent [LazyVim](https://github.com/LazyVim/LazyVim) starter.
+This repository contains my personal Neovim configuration, built as an opinionated version on top of the excellent [LazyVim](https://github.com/LazyVim/LazyVim) starter.
 
 It's tailored to my preferences for development, including custom plugins, keybindings, and aesthetic choices.
 
