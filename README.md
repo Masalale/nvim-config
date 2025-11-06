@@ -22,6 +22,24 @@ To set up this configuration on a new machine:
     ```
     Neovim will automatically install all the necessary plugins.
 
+## Plugins
+
+This config includes the following plugins in addition to LazyVim:
+
+- **HiPhish/nvim-ts-rainbow2** – Rainbow parentheses
+- **norcalli/nvim-colorizer.lua** – CSS color highlighting
+- **ahmedkhalf/lsp-rooter.nvim** – Project root detection
+- **Pocco81/auto-save.nvim** – Auto-save files
+- **karb94/neoscroll.nvim** – Smooth scrolling
+- **MeanderingProgrammer/render-markdown.nvim** – Markdown preview
+- **wakatime/vim-wakatime** – Coding time tracking
+- **wfxr/minimap.vim** – Minimap sidebar
+- **snacks.nvim** – Dashboard and UI enhancements (used for the default LazyVim dashboard)
+
+## Keymaps
+
+- `<Space>;` – Open the LazyVim dashboard at any time (powered by Snacks.nvim)
+
 ## Customization
 
 LazyVim makes customization easy. You can add your own plugins, modify keybindings, and change settings by creating files in the `lua/plugins/` directory or by overriding existing configurations. Refer to the [LazyVim documentation](https://lazyvim.github.io/configuration) for more details.
