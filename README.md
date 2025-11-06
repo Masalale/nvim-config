@@ -26,15 +26,16 @@ To set up this configuration on a new machine:
 
 This config includes the following plugins in addition to LazyVim:
 
-- **HiPhish/nvim-ts-rainbow2** – Rainbow parentheses
-- **norcalli/nvim-colorizer.lua** – CSS color highlighting
-- **ahmedkhalf/lsp-rooter.nvim** – Project root detection
-- **Pocco81/auto-save.nvim** – Auto-save files
-- **karb94/neoscroll.nvim** – Smooth scrolling
-- **MeanderingProgrammer/render-markdown.nvim** – Markdown preview
-- **wakatime/vim-wakatime** – Coding time tracking
-- **wfxr/minimap.vim** – Minimap sidebar
-- **snacks.nvim** – Dashboard and UI enhancements (used for the default LazyVim dashboard)
+- [LazyVim/LazyVim](https://github.com/LazyVim/LazyVim) – Core configuration
+- [HiPhish/nvim-ts-rainbow2](https://github.com/HiPhish/nvim-ts-rainbow2) – Rainbow parentheses
+- [norcalli/nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua) – CSS color highlighting
+- [ahmedkhalf/lsp-rooter.nvim](https://github.com/ahmedkhalf/lsp-rooter.nvim) – Project root detection
+- [Pocco81/auto-save.nvim](https://github.com/Pocco81/auto-save.nvim) – Auto-save files
+- [karb94/neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) – Smooth scrolling
+- [MeanderingProgrammer/render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) – Markdown preview
+- [wakatime/vim-wakatime](https://github.com/wakatime/vim-wakatime) – Coding time tracking
+- [wfxr/minimap.vim](https://github.com/wfxr/minimap.vim) – Minimap sidebar
+- [folke/snacks.nvim](https://github.com/folke/snacks.nvim) – Dashboard and UI enhancements (used for the default LazyVim dashboard)
 
 ## Keymaps
 
