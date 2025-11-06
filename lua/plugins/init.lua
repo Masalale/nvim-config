@@ -13,12 +13,12 @@ return {
   },
 
 
-  -- Rainbow parenthesis (nvim-ts-rainbow2)
+  -- Rainbow Delimiters
   {
-    "HiPhish/nvim-ts-rainbow2",
+    "hiphish/rainbow-delimiters.nvim",
     event = "BufReadPost",
     config = function()
-      require("nvim-ts-rainbow2").setup()
+      require("rainbow-delimiters.setup").setup()
     end,
   },
 
@@ -106,7 +106,10 @@ return {
         callback = function()
           -- Check if it's a normal file buffer and not the dashboard
           if vim.bo.buftype == "" and vim.fn.bufname("%") ~= "" and vim.fn.bufname("%") ~= "dashboard" then
-            vim.cmd("MinimapOpen")
+            -- Check if minimap command exists before calling it
+            if vim.fn.exists(":MinimapOpen") == 2 then
+              vim.cmd("MinimapOpen")
+            end
           end
         end,
       })
