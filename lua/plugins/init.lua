@@ -1,5 +1,4 @@
 return {
-  -- Colorscheme configuration
   {
     "LazyVim/LazyVim",
     opts = {
@@ -12,32 +11,97 @@ return {
     },
   },
 
-
-  -- Rainbow Delimiters
   {
     "hiphish/rainbow-delimiters.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     event = "BufReadPost",
     config = function()
-      require("rainbow-delimiters.setup").setup()
+      local rainbow_delimiters = require("rainbow-delimiters")
+
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [""] = rainbow_delimiters.strategy["global"],
+          vim = rainbow_delimiters.strategy["local"],
+        },
+        query = {
+          [""] = "rainbow-delimiters",
+          lua = "rainbow-blocks",
+        },
+        priority = {
+          [""] = 110,
+          lua = 210,
+        },
+        highlight = {
+          "RainbowDelimiterRed",
+          "RainbowDelimiterYellow",
+          "RainbowDelimiterBlue",
+          "RainbowDelimiterOrange",
+          "RainbowDelimiterGreen",
+          "RainbowDelimiterViolet",
+          "RainbowDelimiterCyan",
+        },
+      }
+
+      vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#E06C75" })
+      vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#E5C07B" })
+      vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#61AFEF" })
+      vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#D19A66" })
+      vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#98C379" })
+      vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#C678DD" })
+      vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#56B6C2" })
     end,
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      ensure_installed = {
+        "lua",
+        "vim",
+        "vimdoc",
+        "javascript",
+        "typescript",
+        "tsx",
+        "python",
+        "rust",
+        "go",
+        "html",
+        "css",
+        "json",
+        "markdown",
+        "markdown_inline",
+        "bash",
+        "c",
+        "cpp",
+        "yaml",
+        "toml",
+      },
+      highlight = {
+        enable = true,
+      },
+      indent = {
+        enable = true,
+      },
+    },
   },
 
   {
     "norcalli/nvim-colorizer.lua",
     config = function()
       require("colorizer").setup({ "css", "scss", "html", "javascript" }, {
-        RGB = true, -- #RGB hex codes
-        RRGGBB = true, -- #RRGGBB hex codes
-        RRGGBBAA = true, -- #RRGGBBAA hex codes
-        rgb_fn = true, -- CSS rgb() and rgba() functions
-        hsl_fn = true, -- CSS hsl() and hsla() functions
-        css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-        css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+        RGB = true,
+        RRGGBB = true,
+        RRGGBBAA = true,
+        rgb_fn = true,
+        hsl_fn = true,
+        css = true,
+        css_fn = true,
       })
     end,
   },
 
-  -- Go to curent project pwd
   {
     "ahmedkhalf/lsp-rooter.nvim",
     event = "BufRead",
@@ -46,7 +110,6 @@ return {
     end,
   },
 
-  -- Auto save
   {
     "Pocco81/auto-save.nvim",
     config = function()
@@ -54,65 +117,78 @@ return {
     end,
   },
 
-  -- Smooth scrolling
   {
     "karb94/neoscroll.nvim",
     event = "WinScrolled",
     config = function()
       require("neoscroll").setup({
-        -- All these keys will be mapped to their corresponding default scrolling animation
         mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
-        hide_cursor = true, -- Hide cursor while scrolling
-        stop_eof = true, -- Stop at <EOF> when scrolling downwards
-        use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
-        respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-        cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
-        easing_function = nil, -- Default easing function
-        pre_hook = nil, -- Function to run before the scrolling animation starts
-        post_hook = nil, -- Function to run after the scrolling animation ends
+        hide_cursor = true,
+        stop_eof = true,
+        use_local_scrolloff = false,
+        respect_scrolloff = false,
+        cursor_scrolls_alone = true,
+        easing_function = nil,
+        pre_hook = nil,
+        post_hook = nil,
       })
     end,
   },
 
-  -- Markdown preview
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
     opts = {},
   },
 
-
-  -- Wakatime
   {
     "wakatime/vim-wakatime",
   },
 
-  -- Minimap (wfxr/minimap.vim)
   {
-    "wfxr/minimap.vim",
-    build = "cargo install --locked code-minimap",
+    "Isrothy/neominimap.nvim",
+    version = "v3.*.*",
+    enabled = true,
+    lazy = false,
     init = function()
-      vim.cmd("let g:minimap_width = 10")
-      vim.cmd("let g:minimap_auto_start = 0") -- Prevent auto-start
-      vim.cmd("let g:minimap_auto_start_win_enter = 0") -- Prevent auto-start on win enter
+      vim.g.neominimap = {
+        auto_enable = true,
+        layout = "float",
+        float = {
+          minimap_width = 15,
+          window_border = "none",
+        },
+        exclude_filetypes = {
+          "dashboard",
+          "help",
+          "netrw",
+          "bigfile",
+          "lazy",
+          "mason",
+        },
+        exclude_buftypes = {
+          "nofile",
+          "nowrite",
+          "quickfix",
+          "terminal",
+          "prompt",
+        },
+        diagnostic = {
+          enabled = true,
+        },
+        git = {
+          enabled = true,
+        },
+        treesitter = {
+          enabled = true,
+        },
+      }
     end,
-    config = function()
-      -- Autocmd to open minimap only for regular files, not on dashboard
-      vim.api.nvim_create_autocmd("BufWinEnter", {
-        callback = function()
-          -- Check if it's a normal file buffer and not the dashboard
-          if vim.bo.buftype == "" and vim.fn.bufname("%") ~= "" and vim.fn.bufname("%") ~= "dashboard" then
-            -- Check if minimap command exists before calling it
-            if vim.fn.exists(":MinimapOpen") == 2 then
-              vim.cmd("MinimapOpen")
-            end
-          end
-        end,
-      })
-    end,
+    keys = {
+      { "<leader>mt", "<cmd>Neominimap toggle<CR>", desc = "Toggle minimap" },
+      { "<leader>mo", "<cmd>Neominimap on<CR>", desc = "Open minimap" },
+      { "<leader>mc", "<cmd>Neominimap off<CR>", desc = "Close minimap" },
+      { "<leader>mf", "<cmd>Neominimap focus<CR>", desc = "Focus minimap" },
+    },
   },
 }

@@ -27,19 +27,23 @@ To set up this configuration on a new machine:
 This config includes the following plugins in addition to LazyVim:
 
 - [LazyVim/LazyVim](https://github.com/LazyVim/LazyVim) – Core configuration
-- [HiPhish/nvim-ts-rainbow2](https://github.com/HiPhish/nvim-ts-rainbow2) – Rainbow parentheses
+- [hiphish/rainbow-delimiters.nvim](https://github.com/hiphish/rainbow-delimiters.nvim) – Rainbow parentheses
 - [norcalli/nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua) – CSS color highlighting
 - [ahmedkhalf/lsp-rooter.nvim](https://github.com/ahmedkhalf/lsp-rooter.nvim) – Project root detection
 - [Pocco81/auto-save.nvim](https://github.com/Pocco81/auto-save.nvim) – Auto-save files
 - [karb94/neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) – Smooth scrolling
 - [MeanderingProgrammer/render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) – Markdown preview
 - [wakatime/vim-wakatime](https://github.com/wakatime/vim-wakatime) – Coding time tracking
-- [wfxr/minimap.vim](https://github.com/wfxr/minimap.vim) – Minimap sidebar
+- [Isrothy/neominimap.nvim](https://github.com/Isrothy/neominimap.nvim) – Minimap sidebar
 - [folke/snacks.nvim](https://github.com/folke/snacks.nvim) – Dashboard and UI enhancements (used for the default LazyVim dashboard)
 
 ## Keymaps
 
 - `<Space>;` – Open the LazyVim dashboard at any time (powered by Snacks.nvim)
+- `<Space>bj` – Jump to buffer (LunarVim-style buffer switcher with letter highlighting)
+- `<Space>bn` / `<Space>bp` – Next/previous buffer
+- `<Space>mt` – Toggle minimap
+- `<Space>mo` / `<Space>mc` – Open/close minimap
 
 ## Customization
 
