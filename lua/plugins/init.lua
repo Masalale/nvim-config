@@ -190,5 +190,13 @@ return {
       { "<leader>mc", "<cmd>Neominimap off<CR>", desc = "Close minimap" },
       { "<leader>mf", "<cmd>Neominimap focus<CR>", desc = "Focus minimap" },
     },
+   },
+
+  {
+    "Masalale/buffer-jump.nvim",
+    keys = {
+      { "<leader>bj", function() require("buffer-jump").jump_to_buffer() end, desc = "Jump to Buffer" },
+    },
+    opts = {},
   },
 }

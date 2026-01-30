@@ -9,7 +9,7 @@ end, { desc = "Open LazyVim Dashboard" })
 
 -- LunarVim-style buffer switcher: <Space>bj
 vim.keymap.set("n", "<Space>bj", function()
-  require("user.buffer_switcher").jump_to_buffer()
+  require("buffer-jump").jump_to_buffer()
 end, { desc = "Jump to buffer (LunarVim style)" })
 
 -- Alternative buffer navigation: <Space>bn (next), <Space>bp (previous)
