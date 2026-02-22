@@ -12,6 +12,20 @@ return {
   },
 
   {
+    "folke/snacks.nvim",
+    opts = function(_, opts)
+      if opts.dashboard and opts.dashboard.preset and opts.dashboard.preset.keys then
+        for _, key in ipairs(opts.dashboard.preset.keys) do
+          if key.key == "c" then
+            key.action = ":e " .. vim.fn.stdpath("config") .. "/lua/plugins/init.lua"
+            break
+          end
+        end
+      end
+    end,
+  },
+
+  {
     "hiphish/rainbow-delimiters.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     event = "BufReadPost",
@@ -123,14 +137,6 @@ return {
     config = function()
       require("neoscroll").setup({
         mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
-        hide_cursor = true,
-        stop_eof = true,
-        use_local_scrolloff = false,
-        respect_scrolloff = false,
-        cursor_scrolls_alone = true,
-        easing_function = nil,
-        pre_hook = nil,
-        post_hook = nil,
       })
     end,
   },
@@ -190,13 +196,5 @@ return {
       { "<leader>mc", "<cmd>Neominimap off<CR>", desc = "Close minimap" },
       { "<leader>mf", "<cmd>Neominimap focus<CR>", desc = "Focus minimap" },
     },
-   },
-
-  {
-    "Masalale/buffer-jump.nvim",
-    keys = {
-      { "<leader>bj", function() require("buffer-jump").jump_to_buffer() end, desc = "Jump to Buffer" },
-    },
-    opts = {},
   },
 }

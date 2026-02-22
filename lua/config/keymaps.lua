@@ -7,10 +7,8 @@ vim.keymap.set("n", "<Space>;", function()
   require("snacks").dashboard()
 end, { desc = "Open LazyVim Dashboard" })
 
--- LunarVim-style buffer switcher: <Space>bj
-vim.keymap.set("n", "<Space>bj", function()
-  require("buffer-jump").jump_to_buffer()
-end, { desc = "Jump to buffer (LunarVim style)" })
+-- BufferLinePick: <Space>bj for quick buffer jumping
+vim.keymap.set("n", "<Space>bj", "<cmd>BufferLinePick<cr>", { desc = "Jump to buffer (BufferLinePick)" })
 
 -- Alternative buffer navigation: <Space>bn (next), <Space>bp (previous)
 vim.keymap.set("n", "<Space>bn", function()
@@ -20,3 +18,7 @@ end, { desc = "Next buffer" })
 vim.keymap.set("n", "<Space>bp", function()
   require("bufferline").cycle(-1)
 end, { desc = "Previous buffer" })
+
+
+vim.keymap.set("n", "<leader>/", "gcc", { remap = true, desc = "Toggle comment" })
+vim.keymap.set("v", "<leader>/", "gc", { remap = true, desc = "Toggle comment" })
