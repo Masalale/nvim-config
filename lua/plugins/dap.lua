@@ -1,10 +1,9 @@
--- C# / .NET debugging. Enables LazyVim's DAP stack (nvim-dap, dap-ui,
--- virtual-text, mason-nvim-dap + the <leader>d / F5-F11 keymaps) and wires the
--- netcoredbg adapter you already install via Mason.
+-- C# / .NET debugging. The LazyVim DAP stack (nvim-dap, dap-ui, virtual-text,
+-- mason-nvim-dap + the <leader>d / F5-F11 keymaps) is enabled via the
+-- `lazyvim.plugins.extras.dap.core` extra in lazyvim.json; this file just wires
+-- the netcoredbg adapter you install via Mason.
 
 return {
-  { import = "lazyvim.plugins.extras.dap.core" },
-
   {
     "mfussenegger/nvim-dap",
     opts = function()

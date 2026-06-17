@@ -1,10 +1,9 @@
--- Test running. Enables LazyVim's neotest stack (+ the <leader>t keymaps) and
+-- Test running. The LazyVim neotest stack (+ the <leader>t keymaps) is enabled
+-- via the `lazyvim.plugins.extras.test.core` extra in lazyvim.json; this file
 -- adds the C#/.NET adapter, wired to the coreclr dap adapter from dap.lua so
 -- `<leader>td` debugs the test under the cursor.
 
 return {
-  { import = "lazyvim.plugins.extras.test.core" },
-
   {
     "nvim-neotest/neotest",
     optional = true,

@@ -2,7 +2,7 @@
 -- already ships, just restyled. Bufferline tabs + lualine status bar.
 
 return {
-  -- Tabs: slant separators, a clickable quit button, and buffer groups.
+  -- Tabs: slant separators and a clickable quit button.
   {
     "akinsho/bufferline.nvim",
     init = function()
@@ -22,52 +22,6 @@ return {
             return { { text = "%@Quit_vim@ 󰗼 %X", fg = "#f7768e" } }
           end,
         },
-        -- Plain matcher tables only — no require("bufferline.groups"), which
-        -- would run at startup before the plugin is on the runtimepath.
-        groups = {
-          options = { toggle_hidden_on_enter = true },
-          items = {
-            {
-              name = "Tests",
-              icon = "󰙨",
-              highlight = { sp = "#51AFEF" },
-              matcher = function(buf)
-                local n = buf.name
-                return n:match("[Tt]ests?%.") ~= nil
-                  or n:match("%.spec%.") ~= nil
-                  or n:match("%.test%.") ~= nil
-                  or n:match("_spec") ~= nil
-                  or n:match("_test") ~= nil
-              end,
-            },
-            {
-              name = "Config",
-              icon = "",
-              highlight = { sp = "#F6A878" },
-              matcher = function(buf)
-                local n = buf.name
-                return n:match("%.csproj$") ~= nil
-                  or n:match("%.sln$") ~= nil
-                  or n:match("%.config$") ~= nil
-                  or n:match("appsettings.*%.json$") ~= nil
-                  or n:match("package%.json$") ~= nil
-                  or n:match("tsconfig.*%.json$") ~= nil
-                  or n:match("%.editorconfig$") ~= nil
-                  or n:match("%.toml$") ~= nil
-                  or n:match("Makefile$") ~= nil
-              end,
-            },
-            {
-              name = "Docs",
-              icon = "",
-              highlight = { sp = "#C678DD" },
-              matcher = function(buf)
-                local n = buf.name
-                return n:match("%.md$") ~= nil or n:match("%.mdx$") ~= nil or n:match("%.txt$") ~= nil
-              end,
-            },
-          },
-        },
       },
     },
   },
@@ -85,7 +39,7 @@ return {
             names[#names + 1] = c.name
           end
         end
-        return #names > 0 and ("  " .. table.concat(names, ",")) or ""
+        return #names > 0 and ("  " .. table.concat(names, ",")) or "  No LSP"
       end
 
       -- Unicode block tracking scroll position through the file.
