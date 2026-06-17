@@ -1,11 +1,21 @@
 -- Override blink.cmp keymap to match LunarVim's autocomplete behavior:
 --   <Tab>     → navigate down, then snippets/AI, then fallback
 --   <S-Tab>   → navigate up, then snippets, then fallback
---   <CR>      → select and accept (won't insert a newline while menu is visible)
+--   <CR>      → accept (items are auto-selected, so 'accept' works cleanly)
+--
+-- Note: auto_brackets is disabled because its async bracket insertion
+-- can fragment the undo history, making 'u' behave unexpectedly.
 return {
   {
     "saghen/blink.cmp",
     opts = {
+      completion = {
+        accept = {
+          auto_brackets = {
+            enabled = false,
+          },
+        },
+      },
       keymap = {
         ["<Tab>"] = {
           "select_next",
@@ -18,7 +28,7 @@ return {
           "fallback",
         },
         ["<CR>"] = {
-          "select_and_accept",
+          "accept",
           "fallback",
         },
       },
