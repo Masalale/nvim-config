@@ -56,89 +56,72 @@ return {
         },
       }
 
-      vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#E06C75" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#E5C07B" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#61AFEF" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#D19A66" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#98C379" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#C678DD" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#56B6C2" })
-    end,
-  },
+      -- Bracket colors follow the active colorscheme: take the foreground of a
+      -- curated set of highlight groups, refreshed on every ColorScheme change.
+      -- Falls back to fixed hex if a source group has no foreground.
+      local sources = {
+        RainbowDelimiterRed = { "@constant.builtin", "Error", "#E06C75" },
+        RainbowDelimiterYellow = { "@function", "WarningMsg", "#E5C07B" },
+        RainbowDelimiterBlue = { "@keyword", "Function", "#61AFEF" },
+        RainbowDelimiterOrange = { "@number", "Constant", "#D19A66" },
+        RainbowDelimiterGreen = { "@string", "String", "#98C379" },
+        RainbowDelimiterViolet = { "@type", "Type", "#C678DD" },
+        RainbowDelimiterCyan = { "@property", "Special", "#56B6C2" },
+      }
 
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      ensure_installed = {
-        "c_sharp",
-      },
-      compile = { enabled = true },
-      sync_install = true,
-    },
-    config = function()
-      vim.env.CC = "gcc"
-    end,
-  },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      ensure_installed = {
-        "lua",
-        "vim",
-        "vimdoc",
-        "javascript",
-        "typescript",
-        "tsx",
-        "python",
-        "rust",
-        "go",
-        "html",
-        "css",
-        "json",
-        "markdown",
-        "markdown_inline",
-        "bash",
-        "c",
-        "cpp",
-        "yaml",
-        "toml",
-      },
-      highlight = {
-        enable = true,
-      },
-      indent = {
-        enable = true,
-      },
-    },
-  },
+      local function fg_of(name)
+        local ok, h = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+        return ok and h.fg and string.format("#%06x", h.fg) or nil
+      end
 
-  {
-    "norcalli/nvim-colorizer.lua",
-    config = function()
-      require("colorizer").setup({ "css", "scss", "html", "javascript" }, {
-        RGB = true,
-        RRGGBB = true,
-        RRGGBBAA = true,
-        rgb_fn = true,
-        hsl_fn = true,
-        css = true,
-        css_fn = true,
+      local function apply()
+        for group, src in pairs(sources) do
+          vim.api.nvim_set_hl(0, group, { fg = fg_of(src[1]) or fg_of(src[2]) or src[3] })
+        end
+      end
+
+      apply()
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        group = vim.api.nvim_create_augroup("RainbowDelimiterColors", { clear = true }),
+        callback = apply,
       })
     end,
   },
 
+  -- Treesitter (LazyVim drives the `main` branch). LazyVim already enables
+  -- highlight/indent/folds and installs a broad default parser set, and
+  -- declares `opts_extend = { "ensure_installed" }`, so this list is appended,
+  -- not replaced — only name the parsers LazyVim's defaults lack.
+  -- Don't set `config`/`build` here: those are last-wins (not merged) and would
+  -- clobber LazyVim's main-branch setup. `$CC` goes in `init` so it's set
+  -- before the build step; the parser-compiling `cc` crate respects it.
   {
-    "ahmedkhalf/lsp-rooter.nvim",
-    event = "BufRead",
-    config = function()
-      require("lsp-rooter").setup()
+    "nvim-treesitter/nvim-treesitter",
+    init = function()
+      vim.env.CC = "gcc"
     end,
+    opts = {
+      ensure_installed = { "c_sharp", "cpp", "css", "go", "rust" },
+    },
   },
 
+  -- Maintained fork of the (archived) norcalli colorizer. Lazy-loads on the
+  -- highlighted filetypes instead of at startup.
+  {
+    "catgoose/nvim-colorizer.lua",
+    ft = { "css", "scss", "html", "javascript" },
+    main = "colorizer",
+    opts = {
+      filetypes = { "css", "scss", "html", "javascript" },
+      options = {
+        parsers = {
+          css = true, -- preset: names, hex, rgb, hsl, oklch, css_var
+          css_fn = true, -- preset: rgb()/hsl()/oklch() functions
+          hex = { rrggbbaa = true }, -- also #RRGGBBAA (rgb/rrggbb on by default)
+        },
+      },
+    },
+  },
 
   {
     "karb94/neoscroll.nvim",

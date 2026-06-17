@@ -1,118 +1,123 @@
-# My Neovim Configuration (An Opinionated LazyVim Setup)
+# 🚀 nvim-config
 
-This repository contains my personal Neovim configuration, built as an opinionated version on top of the excellent [LazyVim](https://github.com/LazyVim/LazyVim) starter.
+My Neovim setup — a [LazyVim](https://github.com/LazyVim/LazyVim) base with the opinions cranked up. Built for living in **C#** and **TypeScript/JavaScript**, with muscle memory carried over from my LunarVim days.
 
-It's tailored to my preferences for development, with a focus on C# and TypeScript/JavaScript development. Originally migrated from LunarVim, this config retains familiar keybinding patterns where possible.
+Fast, quiet, and it gets out of the way. That's the whole pitch.
 
-## Features
+```
+┌─ unokai theme · floating minimap · save-as-you-type ─┐
+│  treesitter everything · flash jumps · rainbow that   │
+│  actually matches your colorscheme                    │
+└───────────────────────────────────────────────────────┘
+```
 
-- **LunarVim-style autocomplete** — `<Tab>` navigates the completion list, `<S-Tab>` navigates up, `<Enter>` accepts
-- **C# development support** — OmniSharp LSP, `csharpier` formatter, .NET debugging
-- **Rainbow delimiters** — Color-matched parentheses, brackets, and braces
-- **Flash.nvim** — Fast buffer navigation with labels
-- **Neominimap** — Sidebar minimap
-- **Render-markdown** — Live markdown preview in Neovim
-- **Smooth scrolling** — Enhanced `<C-u>`/`<C-d>` and scroll wheel behavior
+> **Requires** Neovim **0.11+** (built on 0.12). Treesitter runs on the new `main` branch, so a recent build matters.
 
-## Installation
+## ✨ The good stuff
 
-To set up this configuration on a new machine:
+- **⌨️ Completion that feels like home** — `<Tab>` walks the menu, `<S-Tab>` walks back, `<Enter>` accepts. Pure LunarVim reflexes, zero relearning.
+- **💾 Never lose work** — auto-save fires on `InsertLeave` and (debounced) as you type. Every save runs the formatter first, with undo suppressed so your undo history stays clean. Type, leave insert, it's on disk and pretty.
+- **🟣 C# as a first-class citizen** — OmniSharp LSP, `csharpier` formatting, and `netcoredbg` for debugging, all wired up out of the box.
+- **🌈 Rainbow brackets that read the room** — delimiter colors are pulled from your *active* colorscheme and re-derive on every theme switch. No more One-Dark brackets fighting a Monokai background.
+- **⚡ Flash jumps** — hit `s`, type two chars, teleport. `S` does the same on Treesitter nodes.
+- **🗺️ Floating minimap** — Neominimap with diagnostics, git signs, and treesitter highlights baked in.
+- **📝 Live markdown** — render-markdown turns your `.md` buffers into something readable in place.
+- **🎨 Inline color swatches** — colorizer paints hex/rgb/hsl right in CSS, SCSS, HTML & JS (lazy-loaded, so it costs nothing until you open one).
+- **🛹 Buttery scrolling** — neoscroll animates `<C-u>` / `<C-d>` and friends.
 
-1.  **Backup any existing Neovim configuration:**
-    ```bash
-    mv ~/.config/nvim ~/.config/nvim_backup
-    ```
-2.  **Clone this repository:**
-    ```bash
-    git clone https://github.com/masalale/nvim-config.git ~/.config/nvim
-    ```
-3.  **Launch Neovim:**
-    ```bash
-    nvim
-    ```
-    Neovim will automatically install all the necessary plugins.
+## 📦 Getting it running
 
-## Plugins
+```bash
+# stash whatever you've got
+mv ~/.config/nvim ~/.config/nvim.bak 2>/dev/null
 
-This config includes the following plugins in addition to LazyVim:
+# grab this
+git clone git@github.com:Masalale/nvim-config.git ~/.config/nvim
 
-| Plugin | Description |
-|--------|-------------|
-| [LazyVim/LazyVim](https://github.com/LazyVim/LazyVim) | Core LazyVim distribution |
-| [hiphish/rainbow-delimiters.nvim](https://github.com/hiphish/rainbow-delimiters.nvim) | Rainbow-colored paired delimiters |
-| [norcalli/nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua) | Real-time CSS color hex highlighting |
-| [ahmedkhalf/lsp-rooter.nvim](https://github.com/ahmedkhalf/lsp-rooter.nvim) | Automatic project root detection |
-| [karb94/neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) | Smooth animated scrolling |
-| [folke/flash.nvim](https://github.com/folke/flash.nvim) | Enhanced label-based buffer navigation |
-| [MeanderingProgrammer/render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | Live markdown rendering |
-| [Isrothy/neominimap.nvim](https://github.com/Isrothy/neominimap.nvim) | Sidebar code minimap |
-| [folke/snacks.nvim](https://github.com/folke/snacks.nvim) | Dashboard, picker, terminal, and UI toolkit |
+# launch — plugins install themselves on first run
+nvim
+```
 
-## Keymaps
+First boot pulls every plugin and compiles treesitter parsers, so give it a minute. After that, you're flying.
 
-### General
-| Key | Action |
-|-----|--------|
-| `<Space>;` | Open dashboard |
-| `<Space>/` | Toggle comment on line/selection |
+## 🧩 What's bolted on
 
-### Buffer Navigation
-| Key | Action |
-|-----|--------|
-| `<Space>bn` | Next buffer |
-| `<Space>bp` | Previous buffer |
-| `<S-h>` | Previous buffer |
-| `<S-l>` | Next buffer |
-| `<leader>bd` | Delete buffer |
+On top of LazyVim's defaults:
 
-### Flash Navigation
-| Key | Action | Mode |
-|-----|--------|------|
-| `s` | Jump to label | Normal, Visual, Operator |
-| `S` | Jump to Treesitter label | Normal, Visual, Operator |
-| `r` | Remote flash | Operator |
-| `R` | Treesitter search | Operator, Visual |
-| `<C-s>` | Toggle flash search | Command-line |
+| Plugin | What it does |
+|--------|--------------|
+| [snacks.nvim](https://github.com/folke/snacks.nvim) | Dashboard, pickers, UI bits — the LazyVim Swiss army knife |
+| [rainbow-delimiters.nvim](https://github.com/hiphish/rainbow-delimiters.nvim) | Theme-aware rainbow brackets |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Parsing + highlight, with extra parsers for C#, C++, CSS, Go & Rust |
+| [nvim-colorizer.lua](https://github.com/catgoose/nvim-colorizer.lua) | Inline color previews (the maintained `catgoose` fork) |
+| [neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) | Smooth animated scrolling |
+| [flash.nvim](https://github.com/folke/flash.nvim) | Label-based jump navigation |
+| [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | In-buffer markdown rendering |
+| [neominimap.nvim](https://github.com/Isrothy/neominimap.nvim) | Floating code minimap |
 
-### Minimap
-| Key | Action |
-|-----|--------|
-| `<Space>mt` | Toggle minimap |
-| `<Space>mo` | Enable minimap |
-| `<Space>mc` | Disable minimap |
-| `<Space>mf` | Focus minimap |
+C# tooling (OmniSharp, csharpier, netcoredbg) rides on LazyVim's `nvim-lspconfig`, `mason.nvim`, and `conform.nvim`. Project root detection is handled by LazyVim's built-in logic — no extra plugin needed.
 
-### C# Development
-| Key | Action |
-|-----|--------|
-| `<leader>cf` | Format with csharpier |
-| Standard LSP bindings | Go-to-definition, hover, rename, etc. |
+## ⌨️ Keymaps worth knowing
 
-## Customization
+`<leader>` is `<Space>`.
 
-To add new plugins or override existing configurations, create files in `lua/plugins/`. The directory structure:
+**General**
+| Key | Does |
+|-----|------|
+| `<Space>;` | Open the dashboard |
+| `<Space>/` | Toggle comment (line or selection) |
+
+**Buffers**
+| Key | Does |
+|-----|------|
+| `<Space>bj` | Pick a buffer to jump to |
+| `<Space>bn` / `<Space>bp` | Next / previous buffer |
+| `<S-l>` / `<S-h>` | Next / previous buffer |
+| `<leader>bd` | Close buffer |
+
+**Flash**
+| Key | Does | Modes |
+|-----|------|-------|
+| `s` | Jump to label | normal, visual, operator |
+| `S` | Jump to Treesitter node | normal, visual, operator |
+| `r` | Remote flash | operator |
+| `R` | Treesitter search | operator, visual |
+| `<C-s>` | Toggle flash in search | command-line |
+
+**Minimap**
+| Key | Does |
+|-----|------|
+| `<Space>mt` | Toggle |
+| `<Space>mo` / `<Space>mc` | Open / close |
+| `<Space>mf` | Focus the minimap window |
+
+**C#** — `<leader>cf` formats with csharpier; the usual LSP bindings (definition, hover, rename…) work everywhere.
+
+## 🛠️ Making it yours
+
+Drop new specs into `lua/plugins/` — every `.lua` file in there loads automatically. Handy shortcut: from the dashboard, press **`c`** to jump straight into `plugins/init.lua`.
 
 ```
 ~/.config/nvim/
-├── init.lua                    # Entry point (loads lazy.lua)
+├── init.lua                 # entry point
 ├── lua/
 │   ├── config/
-│   │   ├── lazy.lua            # lazy.nvim bootstrap and plugin spec
-│   │   ├── options.lua         # Editor options
-│   │   ├── keymaps.lua         # Custom keybindings
-│   │   └── autocmds.lua        # Autocommands
+│   │   ├── lazy.lua          # lazy.nvim bootstrap + plugin spec
+│   │   ├── options.lua       # editor options
+│   │   ├── keymaps.lua       # custom keys
+│   │   └── autocmds.lua      # auto-save + format-on-save
 │   └── plugins/
-│       ├── init.lua            # Main plugin specs
-│       ├── cmp.lua             # blink.cmp keymap overrides
-│       └── example.lua         # Reference examples
-├── lazy-lock.json              # Plugin version lock
-└── lazyvim.json                # LazyVim install state
+│       ├── init.lua          # the main plugin specs
+│       ├── cmp.lua           # blink.cmp keymap overrides
+│       └── example.lua       # LazyVim's reference examples
+├── lazy-lock.json            # version lockfile
+└── lazyvim.json              # LazyVim install state
 ```
 
-Refer to the [LazyVim documentation](https://lazyvim.github.io/configuration) for more details.
+The [LazyVim docs](https://lazyvim.github.io/configuration) cover everything else.
 
-## Credits
+## 🙏 Standing on shoulders
 
-- [LazyVim](https://github.com/LazyVim/LazyVim) — The foundation of this configuration
-- [LunarVim](https://github.com/LunarVim/LunarVim) — Inspiration for the autocomplete keybindings and overall workflow
-- [Neovim](https://neovim.io/) — The extensible Vim-based text editor
+- [LazyVim](https://github.com/LazyVim/LazyVim) — the foundation
+- [LunarVim](https://github.com/LunarVim/LunarVim) — where the muscle memory came from
+- [Neovim](https://neovim.io/) — the editor that makes all of this possible
