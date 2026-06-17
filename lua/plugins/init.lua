@@ -72,6 +72,21 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     opts = {
       ensure_installed = {
+        "c_sharp",
+      },
+      compile = { enabled = true },
+      sync_install = true,
+    },
+    config = function()
+      vim.env.CC = "gcc"
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      ensure_installed = {
         "lua",
         "vim",
         "vimdoc",
@@ -142,14 +157,63 @@ return {
   },
 
   {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {},
+    keys = {
+      {
+        "s",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
+      {
+        "S",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").treesitter()
+        end,
+        desc = "Flash Treesitter",
+      },
+      {
+        "r",
+        mode = "o",
+        function()
+          require("flash").remote()
+        end,
+        desc = "Remote Flash",
+      },
+      {
+        "R",
+        mode = { "o", "x" },
+        function()
+          require("flash").treesitter_search()
+        end,
+        desc = "Treesitter Search",
+      },
+      {
+        "<c-s>",
+        mode = { "c" },
+        function()
+          require("flash").toggle()
+        end,
+        desc = "Toggle Flash Search",
+      },
+    },
+  },
+
+  {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
     opts = {},
   },
 
-  {
-    "wakatime/vim-wakatime",
-  },
+  -- {
+  --   "wakatime/vim-wakatime",
+  -- },
 
   {
     "Isrothy/neominimap.nvim",
@@ -195,6 +259,28 @@ return {
       { "<leader>mo", "<cmd>Neominimap on<CR>", desc = "Open minimap" },
       { "<leader>mc", "<cmd>Neominimap off<CR>", desc = "Close minimap" },
       { "<leader>mf", "<cmd>Neominimap focus<CR>", desc = "Focus minimap" },
+    },
+  },
+
+  -- C# LSP (no F#)
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        omnisharp = {
+          enable_roslyn_analyzers = true,
+          organize_imports_on_format = true,
+          enable_import_completion = true,
+        },
+      },
+    },
+  },
+
+  -- Mason: C# only (no F#)
+  {
+    "mason-org/mason.nvim",
+    opts = {
+      ensure_installed = { "csharpier", "netcoredbg" },
     },
   },
 }
