@@ -277,4 +277,14 @@ return {
       ensure_installed = { "csharpier", "netcoredbg" },
     },
   },
+
+  -- C# formatting via csharpier (replaces LSP fallback)
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        cs = { "csharpier" },
+      },
+    },
+  },
 }
