@@ -17,7 +17,8 @@ return {
       if opts.dashboard and opts.dashboard.preset and opts.dashboard.preset.keys then
         for _, key in ipairs(opts.dashboard.preset.keys) do
           if key.key == "c" then
-            key.action = ":e " .. vim.fn.stdpath("config") .. "/lua/plugins/init.lua"
+            key.desc = "Plugins"
+            key.action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config') .. '/lua/plugins' })"
             break
           end
         end
