@@ -28,6 +28,12 @@ local DEBOUNCE_MS = 1000
 local timer = assert((vim.uv or vim.loop).new_timer())
 
 local function save(buf)
+  -- Never write mid-edit: a debounced save queued in normal mode must not land
+  -- after the user has since entered insert/replace mode (format would reflow
+  -- text under the cursor while typing).
+  if vim.api.nvim_get_mode().mode:match("^[iR]") then
+    return
+  end
   if not (vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].modified) then
     return
   end
@@ -40,9 +46,16 @@ local function save(buf)
   end)
 end
 
-vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+vim.api.nvim_create_autocmd({ "InsertEnter", "InsertLeave", "TextChanged" }, {
   group = vim.api.nvim_create_augroup("AutoSave", { clear = true }),
   callback = function(ev)
+    -- Entering insert: kill any pending debounced save so it can't fire while
+    -- you're typing.
+    if ev.event == "InsertEnter" then
+      timer:stop()
+      return
+    end
+
     local buf = ev.buf
     if not vim.bo[buf].modified or vim.bo[buf].buftype ~= "" then
       return
