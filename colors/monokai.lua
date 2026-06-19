@@ -228,6 +228,13 @@ hl("@lsp.type.string",      { fg = C.yellow })
 hl("@lsp.type.number",      { fg = C.purple })
 hl("@lsp.type.boolean",     { fg = C.purple })
 
+-- OmniSharp tags C# punctuation with a semantic token (@lsp.type.punctuation,
+-- priority 125) that outranks treesitter and inherits @lsp's stark blue
+-- default — turning every delimiter ( . ; , () {} ) blue. Defer to the normal
+-- punctuation highlight so C# matches every other language.
+hl("@lsp.type.punctuation",    { link = "@punctuation.delimiter" })
+hl("@lsp.type.punctuation.cs", { link = "@punctuation.delimiter" })
+
 -- Git signs
 hl("GitSignsAdd",           { fg = C.diff_add })
 hl("GitSignsChange",        { fg = C.diff_change })
