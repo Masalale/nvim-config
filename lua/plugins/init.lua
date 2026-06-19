@@ -2,7 +2,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "unokai",
+      colorscheme = "monokai",
       defaults = {
         lazyvim = {
           dashboard = true,
