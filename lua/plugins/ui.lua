@@ -79,6 +79,7 @@ return {
         yellow = "#E6DB74",
         sel = "#49483E", -- selectionBackground → b sections
         c_bg = "#383830", -- a touch lighter than bg so section c stays distinct
+        dim = "#75715E", -- Monokai comment grey — legible (~3.5:1) for inactive
       }
       local function mono_mode(accent)
         return {
@@ -94,9 +95,9 @@ return {
         replace = mono_mode(mono.pink),
         command = mono_mode(mono.yellow),
         inactive = {
-          a = { fg = mono.sel, bg = mono.bg },
-          b = { fg = mono.sel, bg = mono.bg },
-          c = { fg = mono.sel, bg = mono.bg },
+          a = { fg = mono.dim, bg = mono.bg },
+          b = { fg = mono.dim, bg = mono.bg },
+          c = { fg = mono.dim, bg = mono.bg },
         },
       }
 
