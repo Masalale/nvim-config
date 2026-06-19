@@ -11,6 +11,11 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 
+-- Highlight the current line (subtle on unokai's #3a392f). Word-under-cursor
+-- occurrences come from vim-illuminate (the editor.illuminate extra).
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "line"
+
 -- Add cargo bin to PATH for plugins that need it
 local cargo_bin = vim.fn.expand("$HOME/.cargo/bin")
 if vim.fn.isdirectory(cargo_bin) == 1 then

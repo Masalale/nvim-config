@@ -231,8 +231,11 @@ return {
         hl(rp .. "CodeBorder",        { fg = C.line_nr, bg = C.color_col })
       end
 
-      -- Apply now (colorscheme may already be loaded)
-      apply()
+      -- Apply now if unokai is already active (load order varies); the
+      -- autocmd below handles the case where it's set afterwards.
+      if vim.g.colors_name == "unokai" then
+        apply()
+      end
 
       -- Re-apply on any ColorScheme event while unokai is active (render-
       -- markdown and other plugins reset highlights). One autocmd only: a

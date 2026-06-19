@@ -240,22 +240,10 @@ return {
           direction = "right",
           close_if_last_window = true,
         },
-        exclude_filetypes = {
-          "dashboard",
-          "snacks_dashboard",
-          "help",
-          "netrw",
-          "bigfile",
-          "lazy",
-          "mason",
-        },
-        exclude_buftypes = {
-          "nofile",
-          "nowrite",
-          "quickfix",
-          "terminal",
-          "prompt",
-        },
+        -- buf_filter already rejects every non-file buffer, so the only
+        -- filetype worth excluding is bigfile — a real on-disk file (buftype
+        -- "") that buf_filter would otherwise accept; skip it for performance.
+        exclude_filetypes = { "bigfile" },
         -- Remove the (now empty) signcolumn so the minimap glyphs span the
         -- full window width — no inner gutter between content and border.
         winopt = function(opt)

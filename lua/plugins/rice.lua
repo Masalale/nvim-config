@@ -1,27 +1,10 @@
--- ── Rice layer: cursorline · icon glow-up · floating terminal ──
+-- ── Rice layer: icon glow-up · floating terminal ──
+-- (Cursorline lives in config/options.lua; word-under-cursor highlighting is
+-- the vim-illuminate / editor.illuminate extra.)
 
 return {
   -- ═══════════════════════════════════════════════════════════════════
-  -- 1.  Cursorline — built-in current-line highlight. Word-under-cursor
-  --     occurrence highlighting comes from vim-illuminate (the LazyVim
-  --     editor.illuminate extra): whole-word, debounced, LSP/treesitter-
-  --     aware. Its IlluminatedWord* groups link to LspReference*, which
-  --     unokai-reloaded.lua already styles.
-  -- ═══════════════════════════════════════════════════════════════════
-  {
-    "cursorline",
-    dir = vim.fn.stdpath("config"),
-    lazy = false,
-    priority = 900,
-    config = function()
-      -- Subtle on unokai's #3a392f line highlight — already matches the theme.
-      vim.opt.cursorline = true
-      vim.opt.cursorlineopt = "line"
-    end,
-  },
-
-  -- ═══════════════════════════════════════════════════════════════════
-  -- 2.  Icon glow-up — mini.icons is already installed by LazyVim.
+  -- 1.  Icon glow-up — mini.icons is already installed by LazyVim.
   --     We push extra filetype mappings so you see rich icons everywhere
   --     — neo-tree, bufferline, lualine, telescope, etc.
   -- ═══════════════════════════════════════════════════════════════════
@@ -53,13 +36,11 @@ return {
           -- (match patterns aren't supported here; use the `file` table below)
         },
         file = {
-          -- Exact filenames & patterns (mini.icons supports lua patterns in keys)
+          -- Exact basenames only — mini.icons `file` keys are not Lua patterns.
           [".gitignore"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
           [".env"] = { glyph = "󰒙", hl = "MiniIconsYellow" },
           [".editorconfig"] = { glyph = "󰅳", hl = "MiniIconsBlue" },
           ["Dockerfile"] = { glyph = "󰡨", hl = "MiniIconsCyan" },
-          -- Catch-all for dotfiles
-          ["%.dotfiles"] = { glyph = "󰒲", hl = "MiniIconsGreen" },
         },
         extension = {
           -- Additional extension overrides
@@ -91,7 +72,7 @@ return {
   },
 
   -- ═══════════════════════════════════════════════════════════════════
-  -- 3.  Floating terminal — persistent terminal toggles with state
+  -- 2.  Floating terminal — persistent terminal toggles with state
   -- ═══════════════════════════════════════════════════════════════════
   {
     "akinsho/toggleterm.nvim",
@@ -105,7 +86,6 @@ return {
       { "<leader>Tt", "<cmd>ToggleTerm direction=float<CR>", desc = "Term (float)" },
       { "<leader>Tv", "<cmd>ToggleTerm direction=vertical size=80<CR>", desc = "Term (vert)" },
       { "<leader>Th", "<cmd>ToggleTerm direction=horizontal size=12<CR>", desc = "Term (horiz)" },
-      { "<C-`>", "<cmd>ToggleTerm direction=float<CR>", desc = "Term toggle" },
     },
     opts = {
       size = 12,
@@ -114,7 +94,6 @@ return {
       shade_terminals = true,
       shading_factor = 2,
       start_in_insert = true,
-      insert_mappings = true,
       persist_size = true,
       direction = "float",
       close_on_exit = true,
