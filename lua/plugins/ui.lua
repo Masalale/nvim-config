@@ -65,7 +65,43 @@ return {
         end,
       })
 
+      -- VS Code Monokai palette → an explicit, high-contrast lualine theme.
+      -- The unokai-derived "auto" theme washed the bar out; this keeps each
+      -- mode's accent bright against a dark Monokai background so the status
+      -- line stays legible regardless of the editor colorscheme.
+      local mono = {
+        bg = "#272822", -- background
+        fg = "#F8F8F2", -- foreground
+        green = "#A6E22E",
+        blue = "#66D9EF",
+        purple = "#AE81FF",
+        pink = "#F92672", -- (brightRed)
+        yellow = "#E6DB74",
+        sel = "#49483E", -- selectionBackground → b sections
+        c_bg = "#383830", -- a touch lighter than bg so section c stays distinct
+      }
+      local function mono_mode(accent)
+        return {
+          a = { fg = mono.bg, bg = accent, gui = "bold" },
+          b = { fg = mono.fg, bg = mono.sel },
+          c = { fg = mono.fg, bg = mono.c_bg },
+        }
+      end
+      local monokai_theme = {
+        normal = mono_mode(mono.green),
+        insert = mono_mode(mono.blue),
+        visual = mono_mode(mono.purple),
+        replace = mono_mode(mono.pink),
+        command = mono_mode(mono.yellow),
+        inactive = {
+          a = { fg = mono.sel, bg = mono.bg },
+          b = { fg = mono.sel, bg = mono.bg },
+          c = { fg = mono.sel, bg = mono.bg },
+        },
+      }
+
       opts.options = opts.options or {}
+      opts.options.theme = monokai_theme
       opts.options.section_separators = { left = "", right = "" }
       opts.options.component_separators = { left = "", right = "" }
 
