@@ -1,6 +1,8 @@
 {
   "extras": [
     "lazyvim.plugins.extras.dap.core",
+    "lazyvim.plugins.extras.editor.illuminate",
+    "lazyvim.plugins.extras.editor.neo-tree",
     "lazyvim.plugins.extras.test.core"
   ],
   "install_version": 15,
