@@ -187,56 +187,6 @@ return {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
     opts = {},
-    config = function()
-      -- render-markdown sets highlights with `default = true`, so we override
-      -- them *after* it runs so they take effect.
-      local fix_highlights = function()
-        -- unokai has nice markdown heading delimiter colors but render-markdown
-        -- links RenderMarkdownH{N} to @markup.heading.{N}.markdown which inherit
-        -- Normal (fg=NONE).  Give each heading a distinct, high-contrast color.
-        local heading_colors = {
-          { "RenderMarkdownH1", "#f92672" },
-          { "RenderMarkdownH2", "#e6db74" },
-          { "RenderMarkdownH3", "#fd971f" },
-          { "RenderMarkdownH4", "#66d9ef" },
-          { "RenderMarkdownH5", "#51aebe" },
-          { "RenderMarkdownH6", "#a6e22e" },
-        }
-        for _, h in ipairs(heading_colors) do
-          vim.api.nvim_set_hl(0, h[1], { fg = h[2], bold = true })
-        end
-
-        -- @comment / @markup.raw end up at #74705d on unokai, which has a
-        -- contrast ratio of only ~2.95:1 against the #282923 background.
-        -- Brighten them so HTML comments / todo text stay legible.
-        vim.api.nvim_set_hl(0, "RenderMarkdownHtmlComment", { fg = "#a6a080" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownTodo", { fg = "#a6a080" })
-
-        -- Inline-code background inherits from ColorColumn (bg=#585858,
-        -- fg=NONE).  Give inline code an explicit foreground so it stays
-        -- readable regardless of the surrounding context.
-        vim.api.nvim_set_hl(0, "RenderMarkdownCodeInline", {
-          fg = "#f8f8f2",
-          bg = "#585858",
-        })
-        vim.api.nvim_set_hl(0, "RenderMarkdownInlineHighlight", {
-          link = "RenderMarkdownCodeInline",
-        })
-
-        -- RenderMarkdownCode itself (code-block background) is fine with
-        -- bg=#585858, but make sure the border doesn't disappear.
-        vim.api.nvim_set_hl(0, "RenderMarkdownCodeBorder", {
-          fg = "#8a8a8a",
-          bg = "#585858",
-        })
-      end
-
-      fix_highlights()
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        group = vim.api.nvim_create_augroup("RenderMarkdownUnokaiFix", { clear = true }),
-        callback = fix_highlights,
-      })
-    end,
   },
 
   -- {
