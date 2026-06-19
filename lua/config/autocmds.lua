@@ -1,8 +1,18 @@
--- Format-on-save: format with undo suppressed, then let the write complete.
--- Replaces LazyVim's default LazyFormat handler.
+-- Auto-save writes silently; formatting runs ONLY on a deliberate :w (or
+-- <leader>cf), never as a side effect of autosave — so the formatter can't
+-- reflow code while you're editing. This flag marks autosave-triggered writes
+-- so the format-on-save handler skips them.
+local autosaving = false
+
+-- Format-on-save: format with undo suppressed on manual writes, then let the
+-- write complete. Replaces LazyVim's default LazyFormat handler.
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = vim.api.nvim_create_augroup("LazyFormat", { clear = true }),
   callback = function(event)
+    -- Skip autosave writes — only format on a deliberate save.
+    if autosaving then
+      return
+    end
     local buf = event.buf
     if not vim.bo[buf].modified or vim.bo[buf].buftype ~= "" then
       return
@@ -17,7 +27,8 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 -- Auto-save: :w on InsertLeave (immediate) and TextChanged (debounced).
--- Each write flows into BufWritePre above → format → save.
+-- These writes set `autosaving`, so the format-on-save handler above skips
+-- them — autosave saves to disk but never reformats.
 --
 -- One reusable libuv timer instead of a fresh vim.defer_fn per keystroke:
 -- defer_fn allocates a new timer handle on every change and leaks it if
@@ -41,9 +52,12 @@ local function save(buf)
   if vim.bo[buf].buftype ~= "" or vim.api.nvim_buf_get_name(buf) == "" then
     return
   end
+  -- Mark this as an autosave so the format-on-save handler skips it.
+  autosaving = true
   vim.api.nvim_buf_call(buf, function()
     vim.cmd("silent! write")
   end)
+  autosaving = false
 end
 
 vim.api.nvim_create_autocmd({ "InsertEnter", "InsertLeave", "TextChanged" }, {
