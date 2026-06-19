@@ -4,6 +4,13 @@
 
 vim.o.clipboard = "unnamedplus"
 
+-- Wrap long lines to the next line instead of running off-screen (and, with
+-- the neominimap split, hiding under the minimap). linebreak wraps at word
+-- boundaries; breakindent keeps wrapped rows aligned with the line's indent.
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
+
 -- Add cargo bin to PATH for plugins that need it
 local cargo_bin = vim.fn.expand("$HOME/.cargo/bin")
 if vim.fn.isdirectory(cargo_bin) == 1 then

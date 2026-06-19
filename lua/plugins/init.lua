@@ -199,15 +199,50 @@ return {
     enabled = true,
     lazy = false,
     init = function()
+      -- A "code" buffer = a real, on-disk file: not the dashboard, neo-tree,
+      -- a terminal, a directory listing (nvim <dir>), or any unnamed/special
+      -- buffer.
+      local function is_code_buf(bufnr)
+        if vim.bo[bufnr].buftype ~= "" then
+          return false
+        end
+        local name = vim.api.nvim_buf_get_name(bufnr)
+        return name ~= "" and vim.fn.isdirectory(name) == 0
+      end
+
       vim.g.neominimap = {
         auto_enable = true,
-        layout = "float",
-        float = {
+        -- Gate minimap *generation* to code buffers (the exclude_* lists below
+        -- are now just belt-and-suspenders).
+        buf_filter = is_code_buf,
+        -- In split layout the minimap pane opens per-TAB and is NOT gated by
+        -- buf_filter: should_show_minimap_for_tab only checks the tab is
+        -- enabled, so an empty pane lingers on the dashboard. tab_filter is the
+        -- per-tab gate — show the split only when the tab holds a code window.
+        tab_filter = function(tabid)
+          for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(tabid)) do
+            if vim.api.nvim_win_is_valid(winid) and is_code_buf(vim.api.nvim_win_get_buf(winid)) then
+              return true
+            end
+          end
+          return false
+        end,
+        -- Split layout (not float): a float renders *over* the window without
+        -- reserving space, so long lines hide underneath it. A split reserves
+        -- real estate on the right, so text stays in the narrower editing
+        -- window and wraps to the next line (see wrap in config/options.lua).
+        layout = "split",
+        split = {
+          -- 15 cols ≈ 160px — matches the minimap render width so the split
+          -- hugs the minimap instead of reserving a wider gutter (20 ≈ 215px).
           minimap_width = 15,
-          window_border = "none",
+          fix_width = true,
+          direction = "right",
+          close_if_last_window = true,
         },
         exclude_filetypes = {
           "dashboard",
+          "snacks_dashboard",
           "help",
           "netrw",
           "bigfile",
@@ -221,11 +256,21 @@ return {
           "terminal",
           "prompt",
         },
+        -- Remove the (now empty) signcolumn so the minimap glyphs span the
+        -- full window width — no inner gutter between content and border.
+        winopt = function(opt)
+          opt.signcolumn = "no"
+        end,
         diagnostic = {
           enabled = true,
         },
         git = {
+          -- "line" not "sign": git signs need a signcolumn gutter, which ate
+          -- ~55px inside the window (content 110px vs window 165px). Line mode
+          -- highlights the minimap rows instead — git stays visible and the
+          -- glyphs fill the full width.
           enabled = true,
+          mode = "line",
         },
         treesitter = {
           enabled = true,
