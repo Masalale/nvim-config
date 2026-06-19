@@ -16,11 +16,12 @@ Fast, quiet, and it gets out of the way. That's the whole pitch.
 ## ✨ The good stuff
 
 - **⌨️ Completion that feels like home** — `<Tab>` walks the menu, `<S-Tab>` walks back, `<Enter>` accepts. Pure LunarVim reflexes, zero relearning.
-- **💾 Never lose work** — auto-save fires on `InsertLeave` and (debounced) as you type. Every save runs the formatter first, with undo suppressed so your undo history stays clean. Type, leave insert, it's on disk and pretty.
-- **🟣 C# as a first-class citizen** — OmniSharp LSP, `csharpier` formatting, and `netcoredbg` for debugging, all wired up out of the box.
+- **💾 Never lose work** — auto-save writes to disk on `InsertLeave` and (debounced) as you type, silently and without ever reformatting under you. The formatter only runs on a deliberate `:w` / `<leader>cf`, so it can't reflow code mid-edit.
+- **🟣 C# as a first-class citizen** — the **Roslyn** language server (the engine behind VS Code's C# Dev Kit) via `roslyn.nvim` for rock-solid IntelliSense, plus `csharpier` formatting and `netcoredbg` debugging — all wired up out of the box.
+- **🖌️ Custom Monokai** — a contrast-tuned (WCAG-AA) take on the classic VS Code Monokai, shipped as a real colorscheme you can preview and pick from `<leader>uC`. Floats and popups themed to match.
 - **🌈 Rainbow brackets that read the room** — delimiter colors are pulled from your *active* colorscheme and re-derive on every theme switch. No more One-Dark brackets fighting a Monokai background.
 - **⚡ Flash jumps** — hit `s`, type two chars, teleport. `S` does the same on Treesitter nodes.
-- **🗺️ Floating minimap** — Neominimap with diagnostics, git signs, and treesitter highlights baked in.
+- **🗺️ Split minimap** — Neominimap in a split (only for real code buffers — never the dashboard or file trees), with diagnostics, git changes, and treesitter highlights baked in.
 - **📝 Live markdown** — render-markdown turns your `.md` buffers into something readable in place.
 - **🎨 Inline color swatches** — colorizer paints hex/rgb/hsl right in CSS, SCSS, HTML & JS (lazy-loaded, so it costs nothing until you open one).
 - **🛹 Buttery scrolling** — neoscroll animates `<C-u>` / `<C-d>` and friends.
@@ -53,9 +54,11 @@ On top of LazyVim's defaults:
 | [neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) | Smooth animated scrolling |
 | [flash.nvim](https://github.com/folke/flash.nvim) | Label-based jump navigation |
 | [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | In-buffer markdown rendering |
-| [neominimap.nvim](https://github.com/Isrothy/neominimap.nvim) | Floating code minimap |
+| [neominimap.nvim](https://github.com/Isrothy/neominimap.nvim) | Split code minimap (code buffers only) |
+| [roslyn.nvim](https://github.com/seblyng/roslyn.nvim) | Roslyn C# language server — the VS Code C# Dev Kit engine |
+| [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim) | Floating / split terminals under `<leader>T` |
 
-C# tooling (OmniSharp, csharpier, netcoredbg) rides on LazyVim's `nvim-lspconfig`, `mason.nvim`, and `conform.nvim`. Project root detection is handled by LazyVim's built-in logic — no extra plugin needed.
+C# tooling — the **Roslyn** LSP (`roslyn.nvim`), `csharpier` formatting, and `netcoredbg` debugging — rides on `mason.nvim` and `conform.nvim`. The Roslyn server installs through mason (the [Crashdummyy registry](https://github.com/Crashdummyy/mason-registry) is added so you get current, C# 14-ready builds). Project root detection is LazyVim's built-in logic — no extra plugin needed.
 
 ## ⌨️ Keymaps worth knowing
 
@@ -91,23 +94,37 @@ C# tooling (OmniSharp, csharpier, netcoredbg) rides on LazyVim's `nvim-lspconfig
 | `<Space>mo` / `<Space>mc` | Open / close |
 | `<Space>mf` | Focus the minimap window |
 
-**C#** — `<leader>cf` formats with csharpier; the usual LSP bindings (definition, hover, rename…) work everywhere.
+**Terminal** (toggleterm)
+| Key | Does |
+|-----|------|
+| `<Space>Tt` | Floating terminal |
+| `<Space>Tv` / `<Space>Th` | Vertical / horizontal split terminal |
+| `<Esc><Esc>` | Exit terminal mode (back to normal) |
+
+**C#** — `<leader>cf` formats with csharpier; Roslyn powers the usual LSP bindings — go-to-definition, hover, rename (`<leader>cr`), and code actions / refactors (`<leader>ca`) — everywhere.
 
 ## 🛠️ Making it yours
 
-Drop new specs into `lua/plugins/` — every `.lua` file in there loads automatically. Handy shortcut: from the dashboard, press **`c`** to jump straight into `plugins/init.lua`.
+Drop new specs into `lua/plugins/` — every `.lua` file in there loads automatically. Handy shortcut: from the dashboard, press **`c`** to open a picker of your `plugins/` files.
 
 ```
 ~/.config/nvim/
-├── init.lua                 # entry point
+├── init.lua                  # entry point
+├── colors/
+│   └── monokai.lua           # custom contrast-tuned Monokai colorscheme
 ├── lua/
 │   ├── config/
 │   │   ├── lazy.lua          # lazy.nvim bootstrap + plugin spec
 │   │   ├── options.lua       # editor options
 │   │   ├── keymaps.lua       # custom keys
-│   │   └── autocmds.lua      # auto-save + format-on-save
+│   │   └── autocmds.lua      # auto-save (formatter only on manual save)
 │   └── plugins/
-│       ├── init.lua          # the main plugin specs
+│       ├── init.lua          # core specs: treesitter, C#/Roslyn, minimap…
+│       ├── ui.lua            # bufferline + lualine (Monokai theme)
+│       ├── rice.lua          # mini.icons + floating terminal
+│       ├── neo-tree.lua      # file explorer styling
+│       ├── dap.lua           # C# debugging (netcoredbg)
+│       ├── neotest.lua       # C# test running
 │       ├── cmp.lua           # blink.cmp keymap overrides
 │       └── example.lua       # LazyVim's reference examples
 ├── lazy-lock.json            # version lockfile
