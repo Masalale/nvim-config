@@ -273,25 +273,39 @@ return {
     },
   },
 
-  -- C# LSP (no F#)
+  -- C# LSP: the Roslyn language server (the engine behind VS Code's C# Dev Kit)
+  -- via roslyn.nvim — far more reliable than OmniSharp on SDK-style projects.
+  -- The server is installed with `:MasonInstall roslyn` (see the registries on
+  -- the mason spec below); roslyn.nvim auto-detects the mason install.
+  {
+    "seblyng/roslyn.nvim",
+    ft = "cs",
+    opts = {
+      filewatching = "auto",
+      broad_search = true, -- find the .sln even when it isn't a direct parent
+    },
+  },
+
+  -- Disable OmniSharp so it can't attach alongside Roslyn (double diagnostics).
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        omnisharp = {
-          enable_roslyn_analyzers = true,
-          organize_imports_on_format = true,
-          enable_import_completion = true,
-        },
+        omnisharp = { enabled = false },
       },
     },
   },
 
-  -- Mason: C# only (no F#)
+  -- Mason: C# tooling. The Crashdummyy registry ships current Roslyn LS builds
+  -- (the default mason registry lags behind); keep the default registry first.
   {
     "mason-org/mason.nvim",
     opts = {
-      ensure_installed = { "csharpier", "netcoredbg" },
+      registries = {
+        "github:mason-org/mason-registry",
+        "github:Crashdummyy/mason-registry",
+      },
+      ensure_installed = { "csharpier", "netcoredbg", "roslyn" },
     },
   },
 
