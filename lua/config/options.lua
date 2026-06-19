@@ -16,6 +16,10 @@ vim.opt.breakindent = true
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "line"
 
+-- Rounded borders on every floating window, so popups read as crisp cards on
+-- the dark background (the monokai theme paints FloatBorder to match).
+vim.opt.winborder = "rounded"
+
 -- Add cargo bin to PATH for plugins that need it
 local cargo_bin = vim.fn.expand("$HOME/.cargo/bin")
 if vim.fn.isdirectory(cargo_bin) == 1 then

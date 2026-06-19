@@ -304,4 +304,17 @@ return {
       },
     },
   },
+
+  -- Bordered completion popups so the menu/docs/signature read as crisp cards
+  -- on the dark background (borders themed by colors/monokai.lua → FloatBorder).
+  {
+    "saghen/blink.cmp",
+    opts = {
+      completion = {
+        menu = { border = "rounded" },
+        documentation = { window = { border = "rounded" } },
+      },
+      signature = { window = { border = "rounded" } },
+    },
+  },
 }

@@ -1,10 +1,11 @@
--- monokai: a contrast-optimised overhaul of Neovim's built-in unokai theme.
+-- monokai: the classic VS Code Monokai palette, built as a real colorscheme.
 --
--- Loading this scheme loads unokai as the base, then repaints every group that
--- failed WCAG contrast against the #282923 background — keeping the Monokai
--- character while staying legible. Because it lives in colors/, it shows up in
--- the colorscheme picker (<leader>uC) and re-sources on every colorscheme
--- switch, so no ColorScheme autocmd is needed.
+-- It loads Neovim's built-in unokai (a faithful Monokai port) as the base, then
+-- repaints every group that failed WCAG contrast against the #282923 background
+-- and styles all floats/popups to match — keeping the Monokai character while
+-- staying legible. Because it lives in colors/, it shows up in the colorscheme
+-- picker (<leader>uC), is previewable/selectable, and re-sources on every
+-- colorscheme switch, so no ColorScheme autocmd is needed.
 --
 -- ── Problems fixed ──────────────────────────────────────────────────
 --   Comment / @markup.raw        #74705d   2.95:1  →  #9e9278  5.0:1  AA
@@ -50,11 +51,7 @@ local C = {
   stlnc_fg     = "#f8f8f2",    -- ↑ was #282923
 
   -- popup menu
-  pmenu_bg     = "#585858",    -- (keep, 6.67:1 with fg)
-  pmenu_fg     = "#f8f8f2",    -- ↑ was NONE
-  pmenu_sel_bg = "#6c6c6c",    -- ↑ was #8a8a8a
-  pmenu_sel_fg = "#f8f8f2",    -- ↑ was NONE
-  pmenu_thmb   = "#74705d",    -- (keep)
+  pmenu_thmb   = "#74705d",    -- scrollbar thumb (keep)
 
   -- diff
   diff_add     = "#5faf5f",    --  5.4:1  AA   (keep)
@@ -74,6 +71,8 @@ local hl = function(name, opts)
 end
 
 local bg = "#282923"
+local sel = "#49483e"    -- VS Code Monokai selectionBackground (popup selection)
+local border = "#75715e" -- classic Monokai UI grey (popup borders & separators)
 
 -- ── Apply all overrides ────────────────────────────────────────────────
 -- Core syntax
@@ -112,30 +111,38 @@ hl("TabLine",       { fg = C.stlnc_fg, bg = C.stlnc_bg })
 hl("TabLineFill",   { fg = C.stlnc_fg, bg = C.stlnc_bg })
 hl("TabLineSel",    { fg = C.stl_fg, bg = C.stl_bg, bold = true })
 
--- Popup menu
-hl("Pmenu",         { fg = C.pmenu_fg, bg = C.pmenu_bg })
-hl("PmenuSel",      { fg = C.pmenu_sel_fg, bg = C.pmenu_sel_bg })
-hl("PmenuExtra",    { fg = "#d4d4d4", bg = C.pmenu_bg })
-hl("PmenuExtraSel", { fg = "#d4d4d4", bg = C.pmenu_sel_bg })
-hl("PmenuKind",     { fg = C.teal, bg = C.pmenu_bg })
-hl("PmenuKindSel",  { fg = C.teal, bg = C.pmenu_sel_bg })
-hl("PmenuMatch",    { fg = "#ffaf5f", bg = C.pmenu_bg })
-hl("PmenuMatchSel", { fg = "#ffaf5f", bg = C.pmenu_sel_bg })
+-- Popup / completion menu — dark like the editor with a warm VS Code Monokai
+-- selection (#49483e). The rounded, themed border (below) gives it a crisp edge
+-- on the dark background.
+hl("Pmenu",         { fg = C.normal, bg = bg })
+hl("PmenuSel",      { fg = C.normal, bg = sel, bold = true })
+hl("PmenuExtra",    { fg = "#d4d4d4", bg = bg })
+hl("PmenuExtraSel", { fg = "#d4d4d4", bg = sel })
+hl("PmenuKind",     { fg = C.teal, bg = bg })
+hl("PmenuKindSel",  { fg = C.teal, bg = sel })
+hl("PmenuMatch",    { fg = "#ffaf5f", bg = bg })
+hl("PmenuMatchSel", { fg = "#ffaf5f", bg = sel })
 hl("PmenuThumb",    { bg = C.pmenu_thmb })
 hl("PmenuSbar",     {})
 
 -- Floating windows / popups. unokai leaves NormalFloat/FloatBorder unset, so
--- they fell back to Neovim defaults and drifted off-theme. Match the Pmenu
--- grey so every popup — LSP hover & signature, diagnostic floats, blink
+-- they fell back to Neovim defaults. Paint them dark like the editor (VS Code
+-- style) with a crisp Monokai-grey rounded border (vim.o.winborder in
+-- options.lua). Every popup — LSP hover & signature, diagnostics, blink
 -- completion docs, snacks pickers & notifications, which-key, lazy/mason —
--- reads as the same box against the dark editor. (blink's completion menu
--- already uses Pmenu, so the whole completion popup stays consistent too.)
-hl("NormalFloat",   { fg = C.normal, bg = C.pmenu_bg })
-hl("FloatBorder",   { fg = C.line_nr, bg = C.pmenu_bg })
-hl("FloatTitle",    { fg = C.green, bg = C.pmenu_bg, bold = true })
-hl("FloatFooter",   { fg = C.comment, bg = C.pmenu_bg })
+-- links to these groups, so they all match.
+hl("NormalFloat",   { fg = C.normal, bg = bg })
+hl("FloatBorder",   { fg = border, bg = bg })
+hl("FloatTitle",    { fg = C.green, bg = bg, bold = true })
+hl("FloatFooter",   { fg = C.comment, bg = bg })
 -- Modern split separator (VertSplit is the legacy alias; set both).
-hl("WinSeparator",  { fg = C.vert_split, bg = bg })
+hl("WinSeparator",  { fg = border, bg = bg })
+
+-- blink.cmp links its menu/doc borders to Pmenu/NormalFloat (no visible line);
+-- give them the themed border so the completion popups are delineated too.
+hl("BlinkCmpMenuBorder",          { fg = border, bg = bg })
+hl("BlinkCmpDocBorder",           { fg = border, bg = bg })
+hl("BlinkCmpSignatureHelpBorder", { fg = border, bg = bg })
 
 -- Diff
 hl("DiffAdd",       { fg = C.diff_add, reverse = true })
