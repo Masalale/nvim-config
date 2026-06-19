@@ -5,7 +5,7 @@ My Neovim setup — a [LazyVim](https://github.com/LazyVim/LazyVim) base with th
 Fast, quiet, and it gets out of the way. That's the whole pitch.
 
 ```
-┌─ unokai theme · floating minimap · save-as-you-type ─┐
+┌─ monokai theme · split minimap · save-as-you-type ────┐
 │  treesitter everything · flash jumps · rainbow that   │
 │  actually matches your colorscheme                    │
 └───────────────────────────────────────────────────────┘
